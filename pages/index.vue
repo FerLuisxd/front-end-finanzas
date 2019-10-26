@@ -87,6 +87,10 @@ export default {
   components: {
     Logo,
     VuetifyLogo
-  }
+  },
+    mounted() {
+      // console.log('logged', this.$auth.loggedIn)
+      console.log("hello",this.$store)
+    },
 }
 </script>

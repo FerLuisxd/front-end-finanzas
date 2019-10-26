@@ -28,7 +28,7 @@ export default {
       recorder: null,
         emailRules: [
         value => !!value || 'Required.',
-        value => (value || '').length <= 20 || 'Max 20 characters',
+        value => (value || '').length <= 50 || 'Max 50 characters',
         value => {
           const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
           return pattern.test(value) || 'Invalid e-mail.'
@@ -45,7 +45,7 @@ export default {
     computed: {
       btnDisabled1() {
         const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        return  (!pattern.test(this.email) || this.password.length < 8)
+        return  (!pattern.test(this.email) || this.password.length < 3)
       }
     },
     methods: {
@@ -57,12 +57,12 @@ export default {
         // let loader = Loading.service({ fullscreen: true })
         try {
           console.log('entro')
-          this.handleClickStart()
-          this.loginLoading = true
-          await this.delay(4000)
-          this.loginLoading = false
+          // this.handleClickStart()
+          // this.loginLoading = true
+          // await this.delay(4000)
+          // this.loginLoading = false
 
-          this.$router.push({ name: 'index' })
+     
           //et user = await this.$store.dispatch('login/postLogin',{email:this.email, password:this.password})
           await this.$auth
             .loginWith('local', {
@@ -73,15 +73,18 @@ export default {
             })
             .then(res => {
               console.log('res', res, this.$auth.user)
+              console.log('he',this.$auth.loggedIn,this.$auth)
             })
+            .catch(e=> console.log("Err",e))
           console.log('response ', this.$store.state.auth.user)
+          this.$router.push({ name: 'index' })
           //this.$store.commit('login/setUserData',user.data)
           //this.$auth.redirect('/documents')
           //this.$router.push('/documents/')
         } catch (err) {
-          console.log(err)
           console.log('ERROR') //si funciona cuando no encuentra
-          // this.$showAlert({ title: 'Credenciales Inválidas', message: `Correo electrónico y/o contraseña incorrecta.` })
+          console.log(err)
+          // this.$showAlert({ title: 'Credenciales/ Inválidas', message: `Correo electrónico y/o contraseña incorrecta.` })
           //   this.$refs.alertDialog.open('Error Verifica crediedenciales')
         }
         // loader.close()s
