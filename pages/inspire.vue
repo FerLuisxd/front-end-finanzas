@@ -10,6 +10,10 @@
                     v-text-field.mt-2.mb-2(placeholder="Ingrese su correo electrónico", v-model='email',:rules="emailRules")
                 label= "Contraseña"
                     v-text-field.mt-2.mb-2(placeholder="Ingrese su contraseña (min 8 caracteres)", v-model='password' ,type='password')
+                label= "Pregunta Secreta"
+                    v-text-field.mt-2.mb-2(placeholder="Ingrese datos", v-model='question' )
+                label= "Respuesta Secreta"
+                    v-text-field.mt-2.mb-2(placeholder="Ingrese datos", v-model='answer')
                 v-btn.btn-fin(@click='login()' :disabled="btnDisabled1", :loading="loginLoading") Ingresar
             v-col.n(:span="12")
                 .grid-content.bg-skyblue
@@ -22,6 +26,8 @@ export default {
       return {
         email: '',
         password: '',
+        question:'',
+        answer: '',
         loginLoading: false,
               audio_stream:  null,
       audio_context: null,
@@ -45,7 +51,7 @@ export default {
     computed: {
         btnDisabled1() {
           const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-          return  (!pattern.test(this.email) || this.password.length < 3)
+          return  (!pattern.test(this.email) || this.password.length < 3 || this.question.length < 4 || this.answer.length <4)
         }
     },
     methods: {
@@ -57,13 +63,13 @@ export default {
         // let loader = Loading.service({ fullscreen: true })
         try {
           console.log('entro a login')
-          // this.handleClickStart()
-          // this.loginLoading = true
-          // await this.delay(4000)
-          // this.loginLoading = false
+          await this.$axios.post("/auth/signup", {
+            email: this.email,
+            password: this.password,
+            question: this.question,
+            answer: this.answer
+          })
 
-     
-          //et user = await this.$store.dispatch('login/postLogin',{email:this.email, password:this.password})
           await this.$auth
             .loginWith('local', {
               data: {
@@ -93,14 +99,9 @@ export default {
     mounted() {
       console.log("cargue",this.$store.state.nombre)
       
-      // // console.log('logged', this.$auth.loggedIn)
-      // eventBus.$on('openModal', modalType => {
-      //   if (modalType == 'alert') this.$refs.alert.open()
-      //   else this.$refs.confirm.open()
-      // })
     },
     destroyed() {
-      // eventBus.$off('openModal')
+
     },
    
 }
