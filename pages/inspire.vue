@@ -23,7 +23,7 @@ export default {
         email: '',
         password: '',
         loginLoading: false,
-              audio_stream: null,
+              audio_stream:  null,
       audio_context: null,
       recorder: null,
         emailRules: [
@@ -56,7 +56,7 @@ export default {
       async login() {
         // let loader = Loading.service({ fullscreen: true })
         try {
-          console.log('entro')
+          console.log('entro a login')
           // this.handleClickStart()
           // this.loginLoading = true
           // await this.delay(4000)
@@ -77,7 +77,7 @@ export default {
             })
             .catch(e=> console.log("Err",e))
           console.log('response ', this.$store.state.auth.user)
-          this.$router.push({ name: 'index' })
+          this.$router.push({ name: 'frontpage' })
           //this.$store.commit('login/setUserData',user.data)
           //this.$auth.redirect('/documents')
           //this.$router.push('/documents/')
@@ -91,6 +91,8 @@ export default {
       }
     },
     mounted() {
+      console.log("cargue",this.$store.state.nombre)
+      
       // // console.log('logged', this.$auth.loggedIn)
       // eventBus.$on('openModal', modalType => {
       //   if (modalType == 'alert') this.$refs.alert.open()

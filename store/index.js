@@ -1,9 +1,23 @@
 export const state = () => ({
-    counter: 0
-  })
+  count: 0,
+  nombre: "luis"
+})
+export const mutations = {
+  increment(state, n) {
+    console.log("increment", n,electron)
+    console.log("resource" , __resources)
+ 
+  },
+  commandExec(state,command){
   
-  export const mutations = {
-    increment (state) {
-      state.counter++
-    }
+   
   }
+}
+export const  actions = {
+  async  lsExample() {
+
+  },
+  async execute (context,command) {
+ 
+  }
+}
