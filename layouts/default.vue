@@ -72,6 +72,11 @@ export default {
           icon: "mdi-chart-bubble",
           title: "FrontPage",
           to: "/frontpage"
+        },
+        {
+                    icon: "mdi-chart-bubble",
+          title: "FrontPage",
+          to: "/letters"
         }
       ],
       miniVariant: false,

@@ -38,7 +38,7 @@ module.exports = {
   ** Nuxt.js dev-modules
   */
   buildModules: [
-    '@nuxtjs/vuetify',
+    '@nuxtjs/vuetify'
   ],
   /*
   ** Nuxt.js modules
@@ -46,7 +46,8 @@ module.exports = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/auth'
+    '@nuxtjs/auth',
+    '@nuxtjs/moment'
   ],
   auth:{
     strategies: {
@@ -76,16 +77,25 @@ module.exports = {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      dark: false,
       themes: {
         dark: {
-          primary: colors.blue.darken2,
-          accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
-          info: colors.teal.lighten1,
-          warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
-          success: colors.green.accent3
+          primary: '#FFFFFF',
+          accent: '#FF4081',
+          secondary: '#ffe18d',
+          success: '#4CAF50',
+          info: '#2196F3',
+          warning: '#FB8C00',
+          error: '#FF5252'
+        },
+        light: {
+          primary: '#FFFFFF',
+          accent: '#e91e63',
+          secondary: '#30b1dc',
+          success: '#4CAF50',
+          info: '#2196F3',
+          warning: '#FB8C00',
+          error: '#FF5252'
         }
       }
     }
