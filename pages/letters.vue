@@ -1,7 +1,7 @@
 <template>
   <div class="e-nuxt-container">
     <h2>Bienvenidos</h2>
-    <div v-if="logged">
+
       <v-layout align-start>
         <v-flex>
           <v-toolbar flat color="white">
@@ -30,16 +30,19 @@
                   <v-container grid-list-md>
                     <v-layout wrap>
                       <v-flex xs12 sm12 md12>
-                        <v-text-field v-model="correlative" label="corraltivo"></v-text-field>
+                        <v-text-field v-model="correlative" label="corraltivo" type="number"></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm12 md12>
-                        <v-text-field v-model="startDate" label="Fecha de inicio"></v-text-field>
+                           <v-date-picker v-model="dates" range></v-date-picker>
                       </v-flex>
                       <v-flex xs12 sm12 md12>
                         <v-text-field v-model="nominalValue" label="Valor Nominal"></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm12 md12>
-                        <v-text-field v-model="moneyType" label="Tipo de moneda"></v-text-field>
+                        <v-select v-model="moneyType" :items="moneyTypes" label="Tipo de moneda"></v-select>
+                      </v-flex>
+                      <v-flex xs12 sm12 md12>
+                        <v-select v-model="clientId" :items="clients" label="Cliente"></v-select>
                       </v-flex>
                       <v-flex v-if="editedIndex>-1" sm12 md12>
                         <v-checkbox color="green" v-model="usable" :label="`Enabled`"></v-checkbox>
@@ -71,20 +74,6 @@
           </v-data-table>
         </v-flex>
       </v-layout>
-    </div>
-    <div v-else>
-
-       <label class="file-select">
-    <!-- We can't use a normal button element here, as it would become the target of the label. -->
-    <div class="select-button">
-      <!-- Display the filename if a file has been selected. -->
-      <span v-if="value">Selected File: {{value.name}}</span>
-      <span v-else>Select File</span>
-    </div>
-    <!-- Now, the file input that we hide. -->
-    <!-- <input type="file" webkitdirectory    @change="handleFileChange"/> -->
-  </label>
-    </div>
   </div>
 </template>
 
@@ -99,14 +88,6 @@ export default {
       loginLoading: false,
       email: "",
       password: "",
-      emailRules: [
-        value => !!value || "Required.",
-        value => (value || "").length <= 50 || "Max 50 characters",
-        value => {
-          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-          return pattern.test(value) || "Invalid e-mail.";
-        }
-      ],
       letters: [],
       dialog: false,
       headers: [
@@ -114,39 +95,28 @@ export default {
         { text: "Fecha de inicio", value: "startDate", sortable: false },
         { text: "Fecha de vencimiento", value: "endDate", sortable: false }, ///CAMPOS
         { text: "Valor nominal", value: "nominalValue", sortable: false } ///CAMPOS
-        // { text: "Enabled", value: "usable", sortable: true },
-        // { text: "Actions", value: "action", sortable: false }
       ],
       search: "",
       editedInde: -1,
       id: "",
-      correlative: "",
       userId: "",
       clientId: "",
+      correlative: "",
       startDate: "",
       endDate: "",
       nominalValue: "",
+      moneyTypes:[
+        'Nuevo Sol', 'Dolar americano'
+      ],
       moneyType: "",
       endorsmentId: "",
-      editedIndex: -1
+      editedIndex: -1,
+      dates:[],
+      clients:[]
     };
   },
   created() {},
   methods: {
-    executeItem(item){
-      this.$store.dispatch('execute',item)
-    },
-    handleFileChange(e) {
-      // Whenever the file changes, emit the 'input' event with the file data.
-      try {
-        // console.log(e.target.files[0].path)
-        this.location = e.target.files.length>0? e.target.files[0].path : ""
-      } catch (e) {
-        console.error(e )
-      }
-
-      // this.$emit('input', e.target.files[0])
-    },
     close() {
       this.dialog = false;
       this.editedIndex = -1;
@@ -183,7 +153,7 @@ export default {
             id: me.id
           })
           .then(function(response) {
-            console.log(response);
+            // console.log(response);
             if (response.data != true) {
             }
             me.close();
@@ -195,22 +165,17 @@ export default {
         let me = this;
         me.$axios
           .post("/letter", {
-           
-  correlative: me.correlative,
-user: {id:1},
-client: {id:1},
-startDate: "01-12-2017",
-endDate: "02-10-2018",
-nominalValue: Number(me.nominalValue) ,
-moneyType: "sol",
-// endorsmentId: "",
-
-                 
-           
-           
+            correlative: me.correlative,
+            user: { id: 1 },
+            client: { id: 1 },
+            startDate: "01-12-2017",
+            endDate: "02-10-2018",
+            nominalValue: Number(me.nominalValue),
+            moneyType: "sol"
+            // endorsmentId: "",
           })
           .then(function(response) {
-            console.log(response);
+            // console.log(response);
             if (response.data != true) {
             }
             me.close();
@@ -220,37 +185,34 @@ moneyType: "sol",
       }
     },
     clean() {
-      this.id = "";
-      this.name = "";
-      this.command = "";
-      this.usable = null;
-      this.description = "";
-      (this.shortcut = ""), (this.keymap = ""), (this.location = "");
-      //this.direccion = "";
-      //this.telefono = "";
+      this.clientId= "",
+      this.correlative= "",
+      this.startDate= "",
+      this.endDate= "",
+      this.nominalValue= "",
+      this.moneyTypes=[
+        'Nuevo Sol', 'Dolar americano'
+      ],
+      this.moneyType= ""
     },
     list() {
-
-      this.letters = [
-        
-          {
-            "correlative":"213123",
-            "startDate": "12-12-2018",
-            "endDate": "12-12-2019",
-            "nominalValue":21312
-          },
-                  {
-            "correlative":"213125",
-            "startDate": "12-12-2018",
-            "endDate": "12-12-2019",
-            "nominalValue":555
-          },
-      ]
-      //TODO
-      // let me = this;
-      // me.$axios.get(`/letter/`).then(function(response) {
-      //   me.letters = response.data;
-      // });
+      let me = this;
+      me.$axios.get(`/letter/${this.userID}`).then(function(response) {
+        me.letters = response.data;
+      });
+    },
+    listClients(){
+           let me = this;
+          me.clients=[]
+      me.$axios.get(`/client`).then(function(response) {
+       let arrayRes = response.data;
+          arrayRes.map(p => {
+            me.clients.push({
+              text: p.comercialName,
+              value: p.id
+            });
+          });
+      });
     },
     openURL(url) {
       remote.shell.openExternal(url);
@@ -259,14 +221,27 @@ moneyType: "sol",
   async mounted() {
     if (this.logged) {
       this.list();
+      this.listClients()
     }
     // this.list()
-    console.log(this.$store)
+    console.log(this.$store);
   },
   watch: {
     email: function() {},
     dialog(val) {
       val || this.close();
+    },
+    dates(val){
+      for (let i = 0; i < this.dates.length; i++) {
+        const element = this.dates[i];
+        if(i+1<this.dates.length){
+          if(this.dates[i]>this.dates[i+1]){
+            this.dates[i]=this.dates[i+1]
+            this.dates[i+1]=element
+          }
+        }
+        console.log(this.dates)
+      }
     }
   },
   computed: {
@@ -286,6 +261,10 @@ moneyType: "sol",
     formTitle() {
       return this.editedIndex === -1 ? "New Command" : "Update Command";
     }
+    // dates(){
+    //   console.log(dates)
+    //   return dates
+    // }
   }
 };
 </script>
