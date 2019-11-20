@@ -30,23 +30,16 @@
                   <v-container grid-list-md>
                     <v-layout wrap>
                       <v-flex xs12 sm12 md12>
-                        <v-text-field v-model="name" label="Name"></v-text-field>
+                        <v-text-field v-model="correlative" label="corraltivo"></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm12 md12>
-                        <v-text-field v-model="description" label="Description"></v-text-field>
+                        <v-text-field v-model="startDate" label="Fecha de inicio"></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm12 md12>
-                        <v-text-field v-model="command" label="Command"></v-text-field>
+                        <v-text-field v-model="nominalValue" label="Valor Nominal"></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm12 md12>
-                        <v-text-field v-model="shortcut" label="shortcut"></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 sm12 md12>
-                       <input type="file" webkitdirectory    @change="handleFileChange"/>
-                        <v-text-field v-model="location" label="location"></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 sm12 md12>
-                        <v-text-field v-model="keymap" label="keymap"></v-text-field>
+                        <v-text-field v-model="moneyType" label="Tipo de moneda"></v-text-field>
                       </v-flex>
                       <v-flex v-if="editedIndex>-1" sm12 md12>
                         <v-checkbox color="green" v-model="usable" :label="`Enabled`"></v-checkbox>
@@ -117,23 +110,24 @@ export default {
       letters: [],
       dialog: false,
       headers: [
-        { text: "Name", value: "command.name", sortable: false },
-        { text: "Command", value: "command.command", sortable: false },
-        { text: "Shortcut", value: "command.shortcut", sortable: false }, ///CAMPOS
-        { text: "KeyMap", value: "command.keymap", sortable: false }, ///CAMPOS
-        { text: "Enabled", value: "usable", sortable: true },
-        { text: "Actions", value: "action", sortable: false }
+        { text: "Correlativo", value: "correlative", sortable: false },
+        { text: "Fecha de inicio", value: "startDate", sortable: false },
+        { text: "Fecha de vencimiento", value: "endDate", sortable: false }, ///CAMPOS
+        { text: "Valor nominal", value: "nominalValue", sortable: false } ///CAMPOS
+        // { text: "Enabled", value: "usable", sortable: true },
+        // { text: "Actions", value: "action", sortable: false }
       ],
       search: "",
       editedInde: -1,
       id: "",
-      description: "",
-      name: "",
-      command: "",
-      shortcut: "",
-      keymap: "",
-      location: "",
-      usable: null,
+      correlative: "",
+      userId: "",
+      clientId: "",
+      startDate: "",
+      endDate: "",
+      nominalValue: "",
+      moneyType: "",
+      endorsmentId: "",
       editedIndex: -1
     };
   },
@@ -200,13 +194,20 @@ export default {
         //Código para guardar
         let me = this;
         me.$axios
-          .post("/command", {
-            name: me.name,
-            description: me.description,
-            command: me.command,
-            shortcut: me.shortcut,
-            keymap: me.keymap,
-            location: me.location
+          .post("/letter", {
+           
+  correlative: me.correlative,
+user: {id:1},
+client: {id:1},
+startDate: "01-12-2017",
+endDate: "02-10-2018",
+nominalValue: Number(me.nominalValue) ,
+moneyType: "sol",
+// endorsmentId: "",
+
+                 
+           
+           
           })
           .then(function(response) {
             console.log(response);
@@ -229,11 +230,27 @@ export default {
       //this.telefono = "";
     },
     list() {
+
+      this.letters = [
+        
+          {
+            "correlative":"213123",
+            "startDate": "12-12-2018",
+            "endDate": "12-12-2019",
+            "nominalValue":21312
+          },
+                  {
+            "correlative":"213125",
+            "startDate": "12-12-2018",
+            "endDate": "12-12-2019",
+            "nominalValue":555
+          },
+      ]
       //TODO
-      let me = this;
-      me.$axios.get(`/user-command/${me.userID}`).then(function(response) {
-        me.letters = response.data;
-      });
+      // let me = this;
+      // me.$axios.get(`/letter/`).then(function(response) {
+      //   me.letters = response.data;
+      // });
     },
     openURL(url) {
       remote.shell.openExternal(url);
@@ -243,6 +260,8 @@ export default {
     if (this.logged) {
       this.list();
     }
+    // this.list()
+    console.log(this.$store)
   },
   watch: {
     email: function() {},
