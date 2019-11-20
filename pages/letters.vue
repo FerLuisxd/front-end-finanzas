@@ -44,9 +44,6 @@
                       <v-flex xs12 sm12 md12>
                         <v-select v-model="clientId" :items="clients" label="Cliente"></v-select>
                       </v-flex>
-                      <v-flex v-if="editedIndex>-1" sm12 md12>
-                        <v-checkbox color="green" v-model="usable" :label="`Enabled`"></v-checkbox>
-                      </v-flex>
                     </v-layout>
                   </v-container>
                 </v-card-text>
@@ -59,14 +56,15 @@
               </v-card>
             </v-dialog>
           </v-toolbar>
-          <v-data-table :headers="headers" :items="letters " :search="search" class="elevation-1">
+          <v-data-table :headers="headers" :items="letters" :search="search" class="elevation-1">
             <template v-slot:item.usable="{ item }">
-              <v-icon>{{ item.command.usable ? "mdi-checkbox-marked" : "mdi-checkbox-blank-outline" }}</v-icon>
+              <!-- <v-icon>{{ item.usable ? "mdi-checkbox-marked" : "mdi-checkbox-blank-outline" }}</v-icon> -->
             </template>
             <template v-slot:item.action="{ item }">
-              <v-icon small class="mr-2" @click="executeItem(item.command)">exec</v-icon>
+               <v-btn color="white"  class="mb-2" @click="newEndorsement(item)" >New Endrosement</v-btn>
+              <!-- <v-icon small class="mr-2" @click="executeItem(item.command)">exec</v-icon>
               <v-icon small class="mr-2" @click="editItem(item.command)">edit</v-icon>
-              <v-icon small @click="deleteItem(item.command)">delete</v-icon>
+              <v-icon small @click="deleteItem(item.command)">delete</v-icon> -->
             </template>
             <template v-slot:no-data>
               <v-btn color="primary" @click.native="initialize">Reset</v-btn>
@@ -94,7 +92,8 @@ export default {
         { text: "Correlativo", value: "correlative", sortable: false },
         { text: "Fecha de inicio", value: "startDate", sortable: false },
         { text: "Fecha de vencimiento", value: "endDate", sortable: false }, ///CAMPOS
-        { text: "Valor nominal", value: "nominalValue", sortable: false } ///CAMPOS
+        { text: "Valor nominal", value: "nominalValue", sortable: false }, ///CAMPOS
+        { text: "Actions", value: "action", sortable: false }
       ],
       search: "",
       editedInde: -1,
@@ -166,10 +165,10 @@ export default {
         me.$axios
           .post("/letter", {
             correlative: me.correlative,
-            user: { id: 1 },
-            client: { id: 1 },
-            startDate: "01-12-2017",
-            endDate: "02-10-2018",
+            user: { id: this.userID },
+            client: { id: this.clientId },
+            startDate: this.dates[0],
+            endDate: this.dates[1],
             nominalValue: Number(me.nominalValue),
             moneyType: "sol"
             // endorsmentId: "",
@@ -194,6 +193,9 @@ export default {
         'Nuevo Sol', 'Dolar americano'
       ],
       this.moneyType= ""
+    },
+    newEndorsement(item){
+      console.log(item)
     },
     list() {
       let me = this;
