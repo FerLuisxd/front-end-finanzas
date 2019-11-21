@@ -607,16 +607,16 @@ export default {
       return this.$auth.loggedIn;
     },
     formTitle() {
-      return this.editedIndex === -1 ? "New Letter" : "Update Letter";
+      return this.editedIndex === -1 ? "Nueva Letra" : "Update Letter";
     },
     formTitle2() {
-      return this.editedIndex === -1 ? "New Endorsment" : "Update Letter";
+      return this.editedIndex === -1 ? "Vender Letra" : "Update Letter";
     },
     formTitle3() {
-      return this.editedIndex === -1 ? "New TN" : "Update Letter";
+      return this.editedIndex === -1 ? "Tasa Nominal" : "Update Letter";
     },
     formTitle4() {
-      return this.editedIndex === -1 ? "New Cost" : "Update Letter";
+      return this.editedIndex === -1 ? "Agregar Costo" : "Update Letter";
     },
     costsStart() {
       let arr1 = this.costs;
