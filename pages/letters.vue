@@ -30,7 +30,7 @@
                   <v-container grid-list-md>
                     <v-layout wrap>
                       <v-flex xs12 sm12 md12>
-                        <v-text-field v-model="correlative" label="corraltivo" type="number"></v-text-field>
+                        <v-text-field v-model="correlative" label="correlativo" type="number"></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm12 md12>
                            <v-date-picker v-model="dates" range></v-date-picker>
