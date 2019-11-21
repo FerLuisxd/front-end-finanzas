@@ -5,7 +5,7 @@
       <v-layout align-start>
         <v-flex>
           <v-toolbar flat color="white">
-            <v-toolbar-title>Letters</v-toolbar-title>
+            <v-toolbar-title>Letras</v-toolbar-title>
             <v-divider class="mx-2" inset vertical></v-divider>
             <v-spacer></v-spacer>
             <v-text-field
