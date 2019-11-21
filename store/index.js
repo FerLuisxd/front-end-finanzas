@@ -3,11 +3,11 @@ export const state = () => ({
   nombre: "luis"
 })
 export const mutations = {
-  increment(state, n) {
-    console.log("increment", n,electron)
-    console.log("resource" , __resources)
+  // increment(state, n) {
+  //   console.log("increment", n,electron)
+  //   console.log("resource" , __resources)
  
-  },
+  // },
   commandExec(state,command){
   
    

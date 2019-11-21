@@ -20,91 +20,102 @@
 </template>
 
 <script>
-import { delay } from 'q'
+import { delay } from "q";
+// import encryptor from 'simple-encryptor'
 export default {
-    data() {
-      return {
-        email: '',
-        password: '',
-        question:'',
-        answer: '',
-        loginLoading: false,
-              audio_stream:  null,
+  data() {
+    return {
+      email: "",
+      password: "",
+      question: "",
+      answer: "",
+      loginLoading: false,
+      audio_stream: null,
       audio_context: null,
       recorder: null,
-        emailRules: [
-        value => !!value || 'Required.',
-        value => (value || '').length <= 50 || 'Max 50 characters',
+      key: 'key1234567788888888212',
+      emailRules: [
+        value => !!value || "Required.",
+        value => (value || "").length <= 50 || "Max 50 characters",
         value => {
-          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-          return pattern.test(value) || 'Invalid e-mail.'
-        },
-      ],
-      }
-    },
-   
-    head() {
-      return {
-        title: this.title
-      }
-    },
-    computed: {
-        btnDisabled1() {
-          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-          return  (!pattern.test(this.email) || this.password.length < 3 || this.question.length < 4 || this.answer.length <4)
+          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return pattern.test(value) || "Invalid e-mail.";
         }
+      ]
+    };
+  },
+
+  head() {
+    return {
+      title: this.title
+    };
+  },
+  computed: {
+    btnDisabled1() {
+      const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return (
+        !pattern.test(this.email) ||
+        this.password.length < 3 ||
+        this.question.length < 4 ||
+        this.answer.length < 4
+      );
+    }
+  },
+  methods: {
+    submit(data) {
+      // eventBus.$emit('submitConfirm', data)
     },
-    methods: {
-      submit(data) {
-        // eventBus.$emit('submitConfirm', data)
-      },
-      delay(ms){ return new Promise(res => setTimeout(res, ms));},
-      async login() {
-        // let loader = Loading.service({ fullscreen: true })
-        try {
-          console.log('entro a login')
-          await this.$axios.post("/auth/signup", {
-            email: this.email,
-            password: this.password,
-            question: this.question,
-            answer: this.answer
+    delay(ms) {
+      return new Promise(res => setTimeout(res, ms));
+    },
+    async login() {
+      // let loader = Loading.service({ fullscreen: true })
+      try {
+        console.log("entro a login");
+
+            let encryptor = require('simple-encryptor')(this.key);
+        var encrypted = encryptor.encrypt(this.password);    
+         await this.$axios.post("/auth/signup", {
+          email: this.email,
+          password: encrypted,
+          question: this.question,
+          answer: this.answer
+        });
+
+// Create an encryptor:
+
+        await this.$auth
+          .loginWith("local", {
+            data: {
+              email: this.email,
+              password: encrypted
+            }
           })
-
-          await this.$auth
-            .loginWith('local', {
-              data: {
-                email: this.email,
-                password: this.password
-              }
-            })
-            .then(res => {
-              console.log('res', res, this.$auth.user)
-              console.log('he',this.$auth.loggedIn,this.$auth)
-            })
-            .catch(e=> console.log("Err",e))
-          console.log('response ', this.$store.state.auth.user)
-          this.$router.push({ name: 'frontpage' })
-          //this.$store.commit('login/setUserData',user.data)
-          //this.$auth.redirect('/documents')
-          //this.$router.push('/documents/')
-        } catch (err) {
-          console.log('ERROR') //si funciona cuando no encuentra
-          console.log(err)
-          // this.$showAlert({ title: 'Credenciales/ Inválidas', message: `Correo electrónico y/o contraseña incorrecta.` })
-          //   this.$refs.alertDialog.open('Error Verifica crediedenciales')
-        }
-        // loader.close()s
+          .then(res => {
+            console.log("res", res, this.$auth.user);
+            console.log("he", this.$auth.loggedIn, this.$auth);
+            this.$router.push({ name: "letters" });
+          });
+        // .catch(e=> console.log("Err",e))
+        console.log("response ", this.$store.state.auth.user);
+        //this.$store.commit('login/setUserData',user.data)
+        //this.$auth.redirect('/documents')
+        //this.$router.push('/documents/')
+      } catch (err) {
+        console.log(err)
+        console.log("ERROR"); //si funciona cuando no encuentra
+        // console.log(err)
+        // this.$showAlert({ title: 'Credenciales/ Inválidas', message: `Correo electrónico y/o contraseña incorrecta.` })
+        //   this.$refs.alertDialog.open('Error Verifica crediedenciales')
       }
-    },
-    mounted() {
-      console.log("cargue",this.$store.state.nombre)
-      
-    },
-    destroyed() {
-
-    },
-   
-}
+      // loader.close()s
+    }
+  },
+  mounted() {
+    console.log("cargue", this.$store.state.nombre);
+  },
+  destroyed() {}
+};
 </script>
 
 <style lang="sass">

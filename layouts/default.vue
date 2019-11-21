@@ -65,18 +65,13 @@ export default {
         },
         {
           icon: "mdi-chart-bubble",
-          title: "Inspire",
+          title: "Registro",
           to: "/inspire"
         },
         {
           icon: "mdi-chart-bubble",
-          title: "FrontPage",
+          title: "Logueo",
           to: "/frontpage"
-        },
-        {
-                    icon: "mdi-chart-bubble",
-          title: "FrontPage",
-          to: "/letters"
         }
       ],
       miniVariant: false,
@@ -87,22 +82,28 @@ export default {
   },
   methods: {
     addList() {
-      if (this.logged)
-        this.items.push({
-          icon: "mdi-chart-bubble",
-          title: "Logged in",
-          to: ""
-        });
+      if (this.logged){
+
+        this.items=[
+        {
+                    icon: "mdi-chart-bubble",
+          title: "Letters",
+          to: "/letters"
+        },
+        {
+                    icon: "mdi-chart-bubble",
+          title: "Cartera",
+          to: "/endorsment"
+        },
+        ]
+        // this.$router.go('/letters')
+      }
     },
     clicked(){
+      this.$router.push('/frontpage')
       this.$auth.logout()
-             for( var i = 0; i < this.items.length; i++){ 
-   if ( this.items[i].title === 'Logged in') {
-     this.items.splice(i, 1); 
-     i--;
-   }
       console.log("click")
-    }}
+    }
   },
   computed: {
     logged() {
