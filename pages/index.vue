@@ -25,6 +25,7 @@ export default {
         loginLoading: false,
               audio_stream:  null,
       audio_context: null,
+     key: 'key1234567788888888212',
       recorder: null,
         emailRules: [
         value => !!value || 'Required.',
@@ -62,13 +63,14 @@ export default {
           // await this.delay(4000)
           // this.loginLoading = false
 
-            await this.$axios
-
+        let encryptor = require('simple-encryptor')(this.key);
+        var encrypted = encryptor.encrypt(this.password);
+        console.log(encrypted)
           await this.$auth
             .loginWith('local', {
               data: {
                 email: this.email,
-                password: this.password
+                password: encrypted
               }
             })
             .then(res => {
@@ -77,7 +79,7 @@ export default {
                         this.$router.push({ name: 'letters' })
 
             })
-            // .catch(e=> console.log("Err",e))
+            .catch(e=> console.log("Err",e))
           console.log('response ', this.$store.state.auth.user)
         } catch (err) {
           console.log('ERROR') //si funciona cuando no encuentra

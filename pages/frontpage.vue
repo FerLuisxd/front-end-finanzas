@@ -25,7 +25,8 @@ export default {
         loginLoading: false,
               audio_stream:  null,
       audio_context: null,
-      recorder: null,
+ key: 'key1234567788888888212',
+       recorder: null,
         emailRules: [
         value => !!value || 'Required.',
         value => (value || '').length <= 50 || 'Max 50 characters',
@@ -62,13 +63,14 @@ export default {
           // await this.delay(4000)
           // this.loginLoading = false
 
-            await this.$axios
+        let encryptor = require('simple-encryptor')(this.key);
+        var encrypted = encryptor.encrypt(this.password);
 
           await this.$auth
             .loginWith('local', {
               data: {
                 email: this.email,
-                password: this.password
+                password: encrypted
               }
             })
             .then(res => {

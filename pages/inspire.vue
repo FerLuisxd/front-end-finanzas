@@ -21,7 +21,7 @@
 
 <script>
 import { delay } from "q";
-import encryptor from 'simple-encryptor'
+// import encryptor from 'simple-encryptor'
 export default {
   data() {
     return {
@@ -33,7 +33,7 @@ export default {
       audio_stream: null,
       audio_context: null,
       recorder: null,
-      key: 'real secret keys should be long and random',
+      key: 'key1234567788888888212',
       emailRules: [
         value => !!value || "Required.",
         value => (value || "").length <= 50 || "Max 50 characters",
@@ -72,10 +72,12 @@ export default {
       // let loader = Loading.service({ fullscreen: true })
       try {
         console.log("entro a login");
-        let encrypted = encryptor.encrypt(this.password);
-        await this.$axios.post("/auth/signup", {
+
+            let encryptor = require('simple-encryptor')(this.key);
+        var encrypted = encryptor.encrypt(this.password);    
+         await this.$axios.post("/auth/signup", {
           email: this.email,
-          password: password,
+          password: encrypted,
           question: this.question,
           answer: this.answer
         });
@@ -100,6 +102,7 @@ export default {
         //this.$auth.redirect('/documents')
         //this.$router.push('/documents/')
       } catch (err) {
+        console.log(err)
         console.log("ERROR"); //si funciona cuando no encuentra
         // console.log(err)
         // this.$showAlert({ title: 'Credenciales/ Inválidas', message: `Correo electrónico y/o contraseña incorrecta.` })
