@@ -261,7 +261,7 @@ export default {
       return this.$auth.loggedIn;
     },
     formTitle() {
-      return this.editedIndex === -1 ? "New Command" : "Update Command";
+      return this.editedIndex === -1 ? "Nuevo Comando" : "Editar Comando";
     }
     // dates(){
     //   console.log(dates)
