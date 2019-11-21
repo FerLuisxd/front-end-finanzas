@@ -12,7 +12,7 @@
               class="text-xs-center"
               v-model="search"
               append-icon="mdi-anchor"
-              label="Search"
+              label="Buscar"
               single-line
               hide-details
               color="green"
@@ -20,7 +20,7 @@
             <v-spacer></v-spacer>
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on }">
-                <v-btn v-on="on" color="green" dark class="mb-2">New</v-btn>
+                <v-btn v-on="on" color="green" dark class="mb-2">Nuevo</v-btn>
               </template>
               <v-card>
                 <v-card-title>
