@@ -38,7 +38,8 @@ module.exports = {
   ** Nuxt.js dev-modules
   */
   buildModules: [
-    '@nuxtjs/vuetify'
+    '@nuxtjs/vuetify',
+    '@nuxtjs/moment'
   ],
   /*
   ** Nuxt.js modules
@@ -46,8 +47,8 @@ module.exports = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/auth',
-    '@nuxtjs/moment'
+    '@nuxtjs/auth'
+    // ,'@nuxtjs/moment'
   ],
   auth:{
     strategies: {

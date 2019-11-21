@@ -9,7 +9,7 @@
                 label="Correo eléctronico"
                     v-text-field.mt-2.mb-2(placeholder="Ingrese su correo electrónico", v-model='email',:rules="emailRules")
                 label= "Contraseña"
-                    v-text-field.mt-2.mb-2(placeholder="Ingrese su contraseña (min 8 caracteres)", v-model='password' ,type='password')
+                    v-text-field.mt-2.mb-2(placeholder="Ingrese su contraseña (min 3 caracteres)", v-model='password' ,type='password')
                 v-btn.btn-fin(@click='login()' :disabled="btnDisabled1", :loading="loginLoading") Ingresar
             v-col.n(:span="12")
                 .grid-content.bg-skyblue
@@ -74,13 +74,14 @@ export default {
             .then(res => {
               console.log('res', res, this.$auth.user)
               console.log('he',this.$auth.loggedIn,this.$auth)
+                        this.$router.push({ name: 'letters' })
+
             })
-            .catch(e=> console.log("Err",e))
+            // .catch(e=> console.log("Err",e))
           console.log('response ', this.$store.state.auth.user)
-          this.$router.push({ name: 'inspire' })
         } catch (err) {
           console.log('ERROR') //si funciona cuando no encuentra
-          console.log(err)
+          // console.log(err)
           // this.$showAlert({ title: 'Credenciales/ Inválidas', message: `Correo electrónico y/o contraseña incorrecta.` })
           //   this.$refs.alertDialog.open('Error Verifica crediedenciales')
         }
